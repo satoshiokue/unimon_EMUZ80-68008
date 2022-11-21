@@ -1,0 +1,36 @@
+;;;
+;;;	MC6850 (ACIA) Console Driver
+;;;
+
+INIT:
+;	MOVE.B	#$03,ACIAC	; Master reset
+;	NOP
+;	NOP
+;	MOVE.B	#CR_V,ACIAC	; x16 8bit N 1
+
+	RTS
+
+CONIN:
+	MOVE.B	ACIAC,D0
+	AND.B	#$01,D0
+	BEQ	CONIN
+	MOVE.B	ACIAD,D0
+
+	RTS
+
+CONST:
+	MOVE.B	ACIAC,D0
+	AND.B	#$01,D0
+
+	RTS
+
+CONOUT:
+	SWAP	D0
+CO0:
+	MOVE.B	ACIAC,D0
+	AND.B	#$02,D0
+	BEQ	CO0
+	SWAP	D0
+	MOVE.B	D0,ACIAD
+
+	RTS
